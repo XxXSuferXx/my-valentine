@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Valentine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            background: url('background.webp') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0; overflow-x: hidden;
+        }
+
+        /* --- THE HEART TRAIL EFFECT --- */
+        .cursor-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            font-size: 14px;
+            animation: heartFade 1s ease-out forwards;
+        }
+        @keyframes heartFade {
+            0% { opacity: 1; transform: scale(1) translateY(0); }
+            100% { opacity: 0; transform: scale(0.5) translateY(20px) rotate(20deg); }
+        }
+
+        @keyframes emojiBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        .emoji-bounce { 
+            display: inline-block; 
+            animation: emojiBounce 1.5s infinite ease-in-out; 
+        }
+
+        @keyframes fullBoxBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-full-bounce { animation: fullBoxBounce 2s infinite ease-in-out; }
+
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(255, 228, 230, 0.8)); 
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            width: 95%; max-width: 420px; padding: 2.5rem; border-radius: 2.5rem;
+            box-shadow: 0 15px 35px rgba(251, 207, 232, 0.5);
+            border: 2px solid rgba(255, 255, 255, 0.6); z-index: 20; position: relative;
+        }
+
+        .gif-container {
+            position: relative; width: 160px; height: 160px;
+            margin: 0 auto 1.5rem; border-radius: 1rem; overflow: hidden;
+        }
+        .curtain {
+            position: absolute; top: 0; width: 50%; height: 100%;
+            background: #fda4af; z-index: 30; transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 12px;
+        }
+        #left-curtain { left: -50%; border-right: 1px solid white; }
+        #right-curtain { right: -50%; border-left: 1px solid white; }
+        .curtain.active-left { left: 0; }
+        .curtain.active-right { right: 0; }
+
+        .heart-particle {
+            position: fixed; top: -10vh; user-select: none;
+            pointer-events: none; z-index: 5; animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+
+        #overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #ffe4e6; display: flex; align-items: center;
+            justify-content: center; z-index: 1000; transition: all 0.8s ease;
+        }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <div id="overlay">
+        <div class="text-center p-8 bg-white/90 rounded-3xl shadow-xl border-2 border-pink-300">
+            <div class="text-6xl mb-4 emoji-bounce">✉️</div>
+            <h2 class="text-2xl font-bold text-pink-600 mb-6">A secret message for you...</h2>
+            <button id="startBtn" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-transform active:scale-95">
+                Open It
+            </button>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop><source src="music.mp3" type="audio/mpeg"></audio>
+
+    <div id="question-section" class="text-center glass-card fade-in-up">
+        <div class="gif-container shadow-inner">
+            <div id="left-curtain" class="curtain">TOO</div>
+            <div id="right-curtain" class="curtain">SAD</div>
+            <img id="gif-display" src="https://gifdb.com/images/high/cute-love-bear-roses-ou7zho5oosxnpo6k.webp" class="w-full h-full object-cover">
+        </div>
+        <div class="mb-4">
+            <img src="her-photo.png" alt="My Valentine" class="w-40 h-40 mx-auto rounded-2xl shadow-md border-4 border-white object-cover">
+        </div>
+        <h1 class="text-xl font-bold text-pink-600 mb-6">Will you be my Valentine? ❤️</h1>
+        <div class="flex flex-col items-center gap-4">
+            <button id="yesBtn" class="bg-green-500 text-white font-bold py-2 px-10 rounded-full shadow-lg z-50">Yes</button>
+            <button id="noBtn" class="bg-red-500 text-white font-bold py-2 px-10 rounded-full shadow-lg">No</button>
+        </div>
+    </div>
+
+    <div id="thanks-section" class="hidden text-center glass-card animate-full-bounce">
+        <img src="https://media.tenor.com/gUiu1zyxfzYAAAAi/bear-kiss-bear-kisses.gif" class="w-64 h-64 mx-auto rounded-2xl mb-6 object-cover shadow-lg">
+        <h1 class="text-3xl font-bold text-pink-600 mb-4">Yay!!! ❤️</h1>
+        <p class="text-lg text-gray-700 font-medium">I knew you'd say yes!</p>
+    </div>
+
+    <button id="musicToggle" class="fixed bottom-4 right-4 bg-white/70 p-3 rounded-full shadow-lg z-[60]">🔊</button>
+
+    <script>
+        const music = document.getElementById('bg-music');
+        const overlay = document.getElementById('overlay');
+        const startBtn = document.getElementById('startBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const qSection = document.getElementById('question-section');
+        const tSection = document.getElementById('thanks-section');
+
+        // --- HEART TRAIL LOGIC ---
+        document.addEventListener('mousemove', (e) => {
+            if (window.innerWidth < 768) return; // Only for PC
+            const sparkle = document.createElement('div');
+            sparkle.className = 'cursor-heart';
+            sparkle.innerHTML = '❤️';
+            sparkle.style.left = e.clientX + 'px';
+            sparkle.style.top = e.clientY + 'px';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1000);
+        });
+
+        function createHeart() {
+            const h = document.createElement('div');
+            h.className = 'heart-particle';
+            h.innerHTML = ['❤️', '💖', '💗'][Math.floor(Math.random() * 3)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.fontSize = (Math.random() * 15 + 10) + 'px';
+            h.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 5000);
+        }
+
+        startBtn.addEventListener('click', () => {
+            music.play();
+            overlay.style.opacity = '0';
+            setInterval(createHeart, 400);
+            setTimeout(() => overlay.classList.add('hidden'), 800);
+        });
+
+        yesBtn.addEventListener('click', () => {
+            qSection.classList.add('hidden');
+            tSection.classList.remove('hidden');
+        });
+
+        let noCount = 0;
+        const msgs = ["No", "Sure?", "Think again!", "Last chance!", "Fine..."];
+
+        noBtn.addEventListener('click', () => {
+            noCount++;
+            noBtn.innerText = msgs[Math.min(noCount, msgs.length - 1)];
+            const inc = window.innerWidth < 768 ? 18 : 28;
+            yesBtn.style.fontSize = `${16 + (noCount * inc)}px`;
+            yesBtn.style.padding = `${8 + (noCount * 8)}px ${32 + (noCount * 12)}px`;
+
+            if (noCount >= 3) {
+                document.getElementById('left-curtain').classList.add('active-left');
+                document.getElementById('right-curtain').classList.add('active-right');
+            }
+        });
+
+        document.getElementById('musicToggle').addEventListener('click', (e) => {
+            if (music.paused) { music.play(); e.target.innerText = "🔊"; }
+            else { music.pause(); e.target.innerText = "🔇"; }
+        });
+    </script>
+</body>
+</html>
