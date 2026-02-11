@@ -138,9 +138,18 @@
         const qSection = document.getElementById('question-section');
         const tSection = document.getElementById('thanks-section');
 
+        // --- NEW: DATABASE HELPER FUNCTION ---
+        async function recordChoice(choiceValue) {
+            try {
+                await fetch(`/api/vote?choice=${choiceValue}`);
+            } catch (err) {
+                console.error("DB Error:", err);
+            }
+        }
+
         // --- HEART TRAIL LOGIC ---
         document.addEventListener('mousemove', (e) => {
-            if (window.innerWidth < 768) return; // Only for PC
+            if (window.innerWidth < 768) return; 
             const sparkle = document.createElement('div');
             sparkle.className = 'cursor-heart';
             sparkle.innerHTML = '❤️';
@@ -169,6 +178,7 @@
         });
 
         yesBtn.addEventListener('click', () => {
+            recordChoice('yes'); // <--- Record the "Yes"
             qSection.classList.add('hidden');
             tSection.classList.remove('hidden');
         });
@@ -178,6 +188,8 @@
 
         noBtn.addEventListener('click', () => {
             noCount++;
+            recordChoice(`no-attempt-${noCount}`); // <--- Record each "No" attempt
+            
             noBtn.innerText = msgs[Math.min(noCount, msgs.length - 1)];
             const inc = window.innerWidth < 768 ? 18 : 28;
             yesBtn.style.fontSize = `${16 + (noCount * inc)}px`;
