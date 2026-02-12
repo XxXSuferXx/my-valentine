@@ -179,15 +179,21 @@
         let yesStep = 0;
         yesBtn.addEventListener('click', () => {
             // 1. Reset the font size so long messages fit!
-            yesBtn.style.fontSize = '1.25rem'; 
-            yesBtn.style.padding = '10px 20px';
+
+            noCount = 0;
+
+            yesBtn.style.fontSize = '0.9rem'; 
+            yesBtn.style.padding = '12px';
             yesBtn.style.maxWidth = '100%';
-            yesBtn.style.whiteSpace = 'normal';
+            yesBtn.style.lineHeight = '1.4'; // Adds space between lines for readability
+            //yesBtn.style.whiteSpace = 'normal';
 
             if (yesStep === 0) {
+                yesBtn.style.fontSize = '1.1rem';
                 yesBtn.innerText = "Wait, really?! ♥"
                 yesStep++;
             } else if (yesStep === 1) {
+                yesBtn.style.fontSize = '1.2rem';
                 yesBtn.innerText = "I am very serious!!"
                 yesStep++;
             } else {
