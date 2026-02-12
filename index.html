@@ -178,10 +178,11 @@
         });
         let yesStep = 0;
         yesBtn.addEventListener('click', () => {
-            yesBtn.style.maxWidth = '100%'; 
-            yesBtn.style.whiteSpace = 'normal'; 
-            yesBtn.style.wordWrap = 'break-word'; // Forcing text to stay inside
-            yesBtn.style.display = 'inline-block';
+            // 1. Reset the font size so long messages fit!
+            yesBtn.style.fontSize = '1.25rem'; 
+            yesBtn.style.padding = '10px 20px';
+            yesBtn.style.maxWidth = '100%';
+            yesBtn.style.whiteSpace = 'normal';
 
             if (yesStep === 0) {
                 yesBtn.innerText = "Wait, really?! ♥"
