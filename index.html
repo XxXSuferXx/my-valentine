@@ -181,12 +181,19 @@
             // 1. Reset the font size so long messages fit!
 
             noCount = 0;
+            const container = document.querySelector('.glass-card'); 
+            container.style.height = 'auto';
+            
 
-            yesBtn.style.fontSize = '0.9rem'; 
+            // Setting a stable font
+            yesBtn.style.fontSize = '1.2rem'; 
+            yesBtn.style.padding = '12px 20px';
+            yesBtn.style.width = '100%';
+            /*yesBtn.style.fontSize = '0.9rem'; 
             yesBtn.style.padding = '12px';
             yesBtn.style.maxWidth = '100%';
             yesBtn.style.lineHeight = '1.4'; // Adds space between lines for readability
-            //yesBtn.style.whiteSpace = 'normal';
+            //yesBtn.style.whiteSpace = 'normal';*/
 
             if (yesStep === 0) {
                 yesBtn.style.fontSize = '1.1rem';
@@ -200,7 +207,7 @@
             recordChoice('yes'); // <--- Record the "Yes"
             qSection.classList.add('hidden');
             const thanksText = tSection.querySelector('p');
-            thanksText.innerHTML = "I knew you'd say yes!<br><br><strong>I'll be waiting for you at 6:30 at the bungalow! ✨</strong>";
+            thanksText.innerHTML = "I knew you'd say yes!<br><br><strong>I'll be waiting at 6:30 PM on February 14th. ✨</strong>";
             tSection.classList.remove('hidden');
             }
         });
